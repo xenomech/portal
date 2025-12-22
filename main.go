@@ -7,7 +7,12 @@ import (
 
 func main() {
 	fmt.Println("hello world")
-	fmt.Println(config.ConfigDir())
-	fmt.Println(config.ConfigPath())
-
+	cfg, err := config.Load()
+	fmt.Println(cfg.Repos)
+	fmt.Println(err)
+	cfg.AddGitRepositoryToConfig(
+		"abc",
+		"abc",
+	)
+	cfg.Save()
 }
