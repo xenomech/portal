@@ -4,14 +4,24 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
+	"strconv"
 	"strings"
 )
+
+type Status struct {
+	Branch       string
+	Clean        bool
+	Modified     int
+	Ahead        int
+	Behind       int
+	HasRemote    bool
+	ErrorMessage string
+}
 
 // TODO: need better logging
 func runGit(repoPath string, args ...string) (string, error) {
 	cmd := exec.Command("git", args...)
 	cmd.Dir = repoPath
-	fmt.Println(cmd.String())
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
@@ -82,4 +92,50 @@ func Fetch(repoPath string) error {
 func Pull(repoPath string) error {
 	_, err := runGit(repoPath, "pull", "--quiet")
 	return err
+}
+
+func GetStatus(repoPath string) Status {
+	status := Status{}
+	fmt.Println(repoPath)
+
+	// 1.  Get current branch
+	branch, err := GetCurrentBranch(repoPath)
+	if err != nil {
+		fmt.Println("ERROR getting branch:", err)
+		status.ErrorMessage = err.Error()
+		return status
+	}
+	status.Branch = branch
+
+	// 2. Check for modified/untracked files if exisit it will give the list of changes, else empty
+	output, err := runGit(repoPath, "status", "--porcelain")
+	if err != nil {
+		status.ErrorMessage = err.Error()
+		return status
+	}
+	if output == "" {
+		status.Clean = true
+	} else {
+		status.Modified = len(strings.Split(output, "\n"))
+	}
+
+	// Check ahead/behind status
+	remoteBranch := fmt.Sprintf("origin/%s", branch)
+	if BranchExists(repoPath, remoteBranch) {
+		status.HasRemote = true
+
+		// Get ahead count
+		ahead, err := runGit(repoPath, "rev-list", "--count", fmt.Sprintf("%s..HEAD", remoteBranch))
+		if err == nil {
+			status.Ahead, _ = strconv.Atoi(ahead)
+		}
+
+		// Get behind count
+		behind, err := runGit(repoPath, "rev-list", "--count", fmt.Sprintf("HEAD..%s", remoteBranch))
+		if err == nil {
+			status.Behind, _ = strconv.Atoi(behind)
+		}
+	}
+
+	return status
 }
