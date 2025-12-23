@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"portal/constants"
+	"portal/internal/constants"
 
 	"gopkg.in/yaml.v3"
 )
