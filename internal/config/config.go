@@ -133,7 +133,7 @@ func (c *Config) GetGitRepositoryByGroup(groupName string) ([]GitRepository, err
 	return repos, nil
 }
 
-func (c *Config) GetAllRepository() []GitRepository {
+func (c *Config) GetAllGitRepositories() []GitRepository {
 	return c.Repos
 }
 
