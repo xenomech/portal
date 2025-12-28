@@ -6,12 +6,13 @@ import (
 	"path/filepath"
 	"portal/internal/constants"
 
+	"github.com/fatih/color"
 	"gopkg.in/yaml.v3"
 )
 
 type GitRepository struct {
-	Path string "yaml:path"
-	Name string "yaml:name"
+	Path string `yaml:"path"`
+	Name string `yaml:"name"`
 }
 
 type Config struct {
@@ -126,6 +127,7 @@ func (c *Config) GetGitRepositoryByGroup(groupName string) ([]GitRepository, err
 	for _, name := range repoNames {
 		repo, err := c.GetGitRepository(name)
 		if err != nil {
+			color.Yellow("Warning: Repository '%s' in group '%s' not found, skipping", name, groupName)
 			continue
 		}
 		repos = append(repos, *repo)

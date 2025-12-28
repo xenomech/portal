@@ -94,6 +94,38 @@ func Pull(repoPath string) error {
 	return err
 }
 
+// Push pushes to the remote
+func Push(repoPath string, setUpstream bool) error {
+	args := []string{"push"}
+	if setUpstream {
+		args = append(args, "--set-upstream", "origin")
+
+		// Get current branch
+		branch, err := GetCurrentBranch(repoPath)
+		if err != nil {
+			return err
+		}
+		args = append(args, branch)
+	}
+
+	_, err := runGit(repoPath, args...)
+	return err
+}
+
+// DeleteBranch deletes a branch
+func DeleteBranch(repoPath, branch string, force bool) error {
+	args := []string{"branch"}
+	if force {
+		args = append(args, "-D")
+	} else {
+		args = append(args, "-d")
+	}
+	args = append(args, branch)
+
+	_, err := runGit(repoPath, args...)
+	return err
+}
+
 func GetStatus(repoPath string) Status {
 	status := Status{}
 	fmt.Println(repoPath)
