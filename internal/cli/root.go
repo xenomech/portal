@@ -30,4 +30,8 @@ func init() {
 	rootCmd.AddCommand(removeCmd)
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(groupCmd)
+	rootCmd.AddCommand(checkoutCmd)
+	rootCmd.AddCommand(switchCmd)
+	rootCmd.AddCommand(pullCmd)
+	rootCmd.AddCommand(pushCmd)
 }
