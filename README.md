@@ -2,14 +2,13 @@
 
 > Multi-repository Git branch management made simple
 
-Portal is a CLI tool that lets you manage Git branches across multiple repositories simultaneously. Perfect for microservices or  managing related projects.
+Portal is a CLI tool that lets you manage Git branches across multiple repositories simultaneously. Perfect for microservices or managing related projects.
 
 ## Features
 
 - 🚀 Execute git operations across multiple repos in parallel
 - 🌿 Create and switch branches across all repos with one command
 - 📦 Organize repos into groups for targeted operations
-
 
 ## Installation
 
@@ -18,8 +17,15 @@ curl -fsSL https://raw.githubusercontent.com/xenomech/portal/main/install.sh | b
 ```
 
 Then add to your PATH (add to `~/.zshrc` or `~/.bashrc`):
+
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
+```
+
+#### Uninstalling Portal
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/xenomech/portal/main/install.sh | bash -s uninstall
 ```
 
 ## Quick Start
@@ -165,20 +171,21 @@ portal push -g services
 
 ## Flags Reference
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--create` | `-b` | Create new branch |
-| `--group` | `-g` | Target specific group |
-| `--repo` | `-r` | Target specific repo |
-| `--from` | `-f` | Base branch for repo (format: `repo=branch`) |
-| `--sync` | | Fetch before creating branch |
-| `--set-upstream` | `-u` | Set upstream when pushing |
+| Flag             | Short | Description                                  |
+| ---------------- | ----- | -------------------------------------------- |
+| `--create`       | `-b`  | Create new branch                            |
+| `--group`        | `-g`  | Target specific group                        |
+| `--repo`         | `-r`  | Target specific repo                         |
+| `--from`         | `-f`  | Base branch for repo (format: `repo=branch`) |
+| `--sync`         |       | Fetch before creating branch                 |
+| `--set-upstream` | `-u`  | Set upstream when pushing                    |
 
 ## Configuration
 
 Portal stores its configuration in `~/.config/portal/config.yaml`
 
 Example config:
+
 ```yaml
 repos:
   - path: /Users/you/projects/frontend
